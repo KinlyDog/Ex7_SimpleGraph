@@ -91,7 +91,7 @@ class SimpleGraph {
             }
 
             if (stack.isEmpty()) {
-                return new ArrayList<>();
+                return new ArrayList<>(stack);
             }
 
             for (int i = 0; i < vertex.length; i++) {
