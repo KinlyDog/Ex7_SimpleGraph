@@ -60,48 +60,66 @@ class SimpleGraph {
             vertex[i].Hit = false;
         }
 
-        int x = VFrom;
-        boolean flag = false;
+        return DepthFirstSearchRec(stack, VFrom, VTo);
+    }
 
-        while (true) {
-            vertex[x].Hit = true;
-            stack.push(vertex[x]);
+    public ArrayList<Vertex> DepthFirstSearchRec(Stack<Vertex> stack, int x, int VTo) {
+        vertex[x].Hit = true;
+        stack.push(vertex[x]);
 
-            for (int i = 0; i < vertex.length; i++) {
-                if (IsEdge(x, VTo)) {
-                    stack.push(vertex[VTo]);
-                    return new ArrayList<>(stack);
-                }
+        if (IsEdge(x, VTo)) {
+            stack.push(vertex[VTo]);
+            return new ArrayList<>(stack);
+        }
+
+        for (int i = 0; i < vertex.length; i++) {
+            if (IsEdge(x, i) && !vertex[i].Hit) {
+                x = i;
+                return DepthFirstSearchRec(stack, x, VTo);
             }
 
-            for (int i = 0; i < vertex.length; i++) {
-                if (IsEdge(x, i) && !vertex[i].Hit) {
-                    x = i;
-                    break;
-                }
-
-                if (i == vertex.length - 1 && !stack.isEmpty()) {
-                    flag = true;
-                    stack.pop();
-                }
-            }
-
-            if (!flag) {
-                continue;
-            }
-
-            if (stack.isEmpty()) {
-                return new ArrayList<>(stack);
-            }
-
-            for (int i = 0; i < vertex.length; i++) {
-                if (vertex[i] == stack.peek()) {
-                    x = i;
-                    stack.pop();
-                    flag = false;
-                    break;
-                }
+            if (i == vertex.length - 1) {
+                DepthFirstSearchRec2(stack, x, VTo);
             }
         }
+
+        return new ArrayList<>(stack);
+    }
+
+    public void DepthFirstSearchRec2(Stack<Vertex> stack, int x, int VTo) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        stack.pop();
+
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        for (int i = 0; i < vertex.length; i++) {
+            if (vertex[i] == stack.peek()) {
+                x = i;
+                stack.pop();
+                DepthFirstSearchRec(stack, x, VTo);
+                return;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SimpleGraph graph = new SimpleGraph(6);
+
+        for (int i = 0; i < 6; i++) {
+            graph.AddVertex(i);
+        }
+
+        graph.AddEdge(0, 1);
+        graph.AddEdge(1, 3);
+        graph.AddEdge(3, 5);
+        ArrayList<Vertex> ls = graph.DepthFirstSearch(3, 5);
+        System.out.println(ls.toString());
+        System.out.println(graph.IsEdge(3, 5));
+
     }
 }
