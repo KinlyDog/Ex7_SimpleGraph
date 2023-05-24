@@ -106,20 +106,4 @@ class SimpleGraph {
             }
         }
     }
-
-    public static void main(String[] args) {
-        SimpleGraph graph = new SimpleGraph(6);
-
-        for (int i = 0; i < 6; i++) {
-            graph.AddVertex(i);
-        }
-
-        graph.AddEdge(0, 1);
-        graph.AddEdge(1, 3);
-        graph.AddEdge(3, 5);
-        ArrayList<Vertex> ls = graph.DepthFirstSearch(3, 5);
-        System.out.println(ls.toString());
-        System.out.println(graph.IsEdge(3, 5));
-
-    }
 }
