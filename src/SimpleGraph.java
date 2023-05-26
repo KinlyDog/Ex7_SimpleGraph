@@ -53,11 +53,11 @@ class SimpleGraph {
         m_adjacency[v2][v1] = 0;
     }
 
+
     public ArrayList<Vertex> DepthFirstSearch(int VFrom, int VTo) {
         Stack<Vertex> stack = new Stack<>();
-
-        for (int i = 0; i < vertex.length; i++) {
-            vertex[i].Hit = false;
+        for (Vertex v : vertex) {
+            v.Hit = false;
         }
 
         return DepthFirstSearchRec(stack, VFrom, VTo);
@@ -65,6 +65,7 @@ class SimpleGraph {
 
     public ArrayList<Vertex> DepthFirstSearchRec(Stack<Vertex> stack, int x, int VTo) {
         vertex[x].Hit = true;
+
         stack.push(vertex[x]);
 
         if (IsEdge(x, VTo)) {
@@ -72,36 +73,36 @@ class SimpleGraph {
             return new ArrayList<>(stack);
         }
 
-        for (int i = 0; i < vertex.length; i++) {
+        for (int i = 0; i < max_vertex; i++) {
             if (IsEdge(x, i) && !vertex[i].Hit) {
-                x = i;
-                return DepthFirstSearchRec(stack, x, VTo);
+                return DepthFirstSearchRec(stack, i, VTo);
             }
 
-            if (i == vertex.length - 1) {
-                DepthFirstSearchRec2(stack, x, VTo);
+            if (stack.isEmpty()) {
+                break;
+            }
+
+            if (i == max_vertex - 1) {
+                DepthFirstSearchPop(stack, x, VTo);
             }
         }
 
         return new ArrayList<>(stack);
     }
 
-    public void DepthFirstSearchRec2(Stack<Vertex> stack, int x, int VTo) {
-        if (stack.isEmpty()) {
-            return;
-        }
 
+
+    public void DepthFirstSearchPop(Stack<Vertex> stack, int x, int VTo) {
         stack.pop();
 
         if (stack.isEmpty()) {
             return;
         }
 
-        for (int i = 0; i < vertex.length; i++) {
+        for (int i = 0; i < max_vertex; i++) {
             if (vertex[i] == stack.peek()) {
-                x = i;
                 stack.pop();
-                DepthFirstSearchRec(stack, x, VTo);
+                DepthFirstSearchRec(stack, i, VTo);
                 return;
             }
         }
