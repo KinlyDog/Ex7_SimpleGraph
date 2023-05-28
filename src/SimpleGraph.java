@@ -116,27 +116,26 @@ class SimpleGraph {
 
         Queue<ArrayList<Vertex>> queue = new LinkedList<>();
         ArrayList<Vertex> initialPath = new ArrayList<>();
-
         initialPath.add(vertex[VFrom]);
         queue.add(initialPath);
 
         vertex[VFrom].Hit = true;
 
         while (!queue.isEmpty()) {
-            ArrayList<Vertex> currentPath = queue.remove();
+            ArrayList<Vertex> currentPath = queue.poll();
             Vertex currentVertex = currentPath.get(currentPath.size() - 1);
-            int x = currentVertex.Index;
 
-            if (x == VTo) {
+            if (currentVertex.Index == VTo) {
                 return currentPath;
             }
 
             for (int i = 0; i < max_vertex; i++) {
-                if (IsEdge(x, i) && !vertex[i].Hit) {
-                    vertex[i].Hit = true;
+                if (IsEdge(currentVertex.Index, i) && !vertex[i].Hit) {
                     ArrayList<Vertex> newPath = new ArrayList<>(currentPath);
                     newPath.add(vertex[i]);
                     queue.add(newPath);
+
+                    vertex[i].Hit = true;
                 }
             }
         }
