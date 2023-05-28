@@ -82,14 +82,14 @@ class SimpleGraph {
             }
 
             if (i == max_vertex - 1) {
-                DepthFirstSearchPop(stack, x, VTo);
+                DepthFirstSearchPop(stack, VTo);
             }
         }
 
         return new ArrayList<>(stack);
     }
 
-    public void DepthFirstSearchPop(Stack<Vertex> stack, int x, int VTo) {
+    public void DepthFirstSearchPop(Stack<Vertex> stack, int VTo) {
         if (stack.isEmpty()) {
             return;
         }
