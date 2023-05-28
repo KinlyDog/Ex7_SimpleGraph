@@ -3,10 +3,12 @@ import java.util.*;
 class Vertex {
     public int Value;
     public boolean Hit;
+    public int Index;
 
     public Vertex(int val) {
         Value = val;
         Hit = false;
+        Index = -1;
     }
 }
 
@@ -25,6 +27,7 @@ class SimpleGraph {
         for (int i = 0; i < max_vertex; i++) {
             if (vertex[i] == null) {
                 vertex[i] = new Vertex(value);
+                vertex[i].Index = i;
                 break;
             }
         }
@@ -78,10 +81,6 @@ class SimpleGraph {
                 return DepthFirstSearchRec(stack, i, VTo);
             }
 
-            if (stack.isEmpty()) {
-                break;
-            }
-
             if (i == max_vertex - 1) {
                 DepthFirstSearchPop(stack, x, VTo);
             }
@@ -90,9 +89,11 @@ class SimpleGraph {
         return new ArrayList<>(stack);
     }
 
-
-
     public void DepthFirstSearchPop(Stack<Vertex> stack, int x, int VTo) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
         stack.pop();
 
         if (stack.isEmpty()) {
@@ -106,5 +107,40 @@ class SimpleGraph {
                 return;
             }
         }
+    }
+
+    public ArrayList<Vertex> BreadthFirstSearch(int VFrom, int VTo) {
+        for (Vertex v : vertex) {
+            v.Hit = false;
+        }
+
+        Queue<ArrayList<Vertex>> queue = new LinkedList<>();
+        ArrayList<Vertex> initialPath = new ArrayList<>();
+
+        initialPath.add(vertex[VFrom]);
+        queue.add(initialPath);
+
+        vertex[VFrom].Hit = true;
+
+        while (!queue.isEmpty()) {
+            ArrayList<Vertex> currentPath = queue.remove();
+            Vertex currentVertex = currentPath.get(currentPath.size() - 1);
+            int x = currentVertex.Index;
+
+            if (x == VTo) {
+                return currentPath;
+            }
+
+            for (int i = 0; i < max_vertex; i++) {
+                if (IsEdge(x, i) && !vertex[i].Hit) {
+                    vertex[i].Hit = true;
+                    ArrayList<Vertex> newPath = new ArrayList<>(currentPath);
+                    newPath.add(vertex[i]);
+                    queue.add(newPath);
+                }
+            }
+        }
+
+        return new ArrayList<>();
     }
 }
