@@ -116,6 +116,7 @@ class SimpleGraph {
 
         Queue<ArrayList<Vertex>> queue = new LinkedList<>();
         ArrayList<Vertex> initialPath = new ArrayList<>();
+
         initialPath.add(vertex[VFrom]);
         queue.add(initialPath);
 
@@ -132,6 +133,7 @@ class SimpleGraph {
             for (int i = 0; i < max_vertex; i++) {
                 if (IsEdge(currentVertex.Index, i) && !vertex[i].Hit) {
                     ArrayList<Vertex> newPath = new ArrayList<>(currentPath);
+
                     newPath.add(vertex[i]);
                     queue.add(newPath);
 
@@ -141,5 +143,41 @@ class SimpleGraph {
         }
 
         return new ArrayList<>();
+    }
+
+    public ArrayList<Vertex> WeakVertices() {
+        ArrayList<Vertex> weakVertices = new ArrayList<>();
+
+        for (Vertex v : vertex) {
+            if (v != null && !isPartOfTriangle(v)) {
+                weakVertices.add(v);
+            }
+        }
+
+        return weakVertices;
+    }
+
+    private boolean isPartOfTriangle(Vertex v) {
+        for (int i = 0; i < max_vertex; i++) {
+            if (hasCommonNeighbor(v, i)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasCommonNeighbor(Vertex v, int index) {
+        if (!IsEdge(v.Index, index)) {
+            return false;
+        }
+
+        for (int j = index + 1; j < max_vertex; j++) {
+            if (IsEdge(v.Index, j) && IsEdge(index, j)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
