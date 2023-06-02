@@ -149,7 +149,7 @@ class SimpleGraph {
         ArrayList<Vertex> weakVertices = new ArrayList<>();
 
         for (Vertex v : vertex) {
-            if (v != null && !isPartOfTriangle(v)) {
+            if (v != null && !isPartOfTriangle(v.Index)) {
                 weakVertices.add(v);
             }
         }
@@ -157,9 +157,9 @@ class SimpleGraph {
         return weakVertices;
     }
 
-    private boolean isPartOfTriangle(Vertex v) {
+    private boolean isPartOfTriangle(int v) {
         for (int i = 0; i < max_vertex; i++) {
-            if (hasCommonNeighbor(v, i)) {
+            if (IsEdge(v, i) && hasCommonNeighbor(v, i)) {
                 return true;
             }
         }
@@ -167,13 +167,9 @@ class SimpleGraph {
         return false;
     }
 
-    private boolean hasCommonNeighbor(Vertex v, int index) {
-        if (!IsEdge(v.Index, index)) {
-            return false;
-        }
-
-        for (int j = index + 1; j < max_vertex; j++) {
-            if (IsEdge(v.Index, j) && IsEdge(index, j)) {
+    private boolean hasCommonNeighbor(int first, int second) {
+        for (int j = 0; j < max_vertex; j++) {
+            if (IsEdge(first, j) && IsEdge(second, j)) {
                 return true;
             }
         }
